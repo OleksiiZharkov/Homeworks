@@ -1,6 +1,7 @@
 package hw04;
 
 import java.util.ArrayList;
+import java.util.Set;
 
 public class Homework4 {
 
@@ -29,7 +30,12 @@ public class Homework4 {
     public static class Dog extends Pet {
         final String name;
 
-        Dog(String name) {
+        public Dog(String name) {
+            this.name = name;
+        }
+
+        public Dog(String рекс, int i, int i1, Set<String> dogHabits, String name) {
+            super();
             this.name = name;
         }
 
