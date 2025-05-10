@@ -12,6 +12,18 @@ public class Homework4 {
         void eat() {
             System.out.println("I'm eating");
         }
+
+        public int getTrickLevel() {
+            return 0;
+        }
+
+        public Object getSpecies() {
+            return null;
+        }
+
+        public Object getAge() {
+            return null;
+        }
     }
 
     public static class Dog extends Pet {
@@ -109,6 +121,10 @@ public class Homework4 {
                     ((Cat) pet).scratch();
                 }
             }
+        }
+
+        public Pet getPet() {
+            return null;
         }
     }
 
