@@ -1,6 +1,10 @@
 package hw04;
 
+import hw06.Man;
+import hw06.Woman;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Set;
 
 public class Homework4 {
@@ -102,7 +106,10 @@ public class Homework4 {
             this.pets = new ArrayList<>();
         }
 
-        public void addChild(Human child) {
+        public Family(Woman mother3, Man father3) {
+        }
+
+        public void addChild(Woman child) {
             children.add(child);
         }
 
@@ -131,6 +138,18 @@ public class Homework4 {
 
         public Pet getPet() {
             return null;
+        }
+
+        public int countFamily() {
+        }
+
+        public Arrays getChildren() {
+        }
+
+        public void deleteChild(hw06.Human human) {
+        }
+
+        public void addChild(Man man) {
         }
     }
 

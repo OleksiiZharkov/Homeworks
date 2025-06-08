@@ -14,6 +14,10 @@ public final class Woman extends Human {
         super(name, surname, year, iq, schedule);
     }
 
+    public Woman(String тетяна, String сидорова, String s, int i) {
+        super();
+    }
+
     @Override
     public void greetPet() {
         System.out.println("Привіт, солоденький!");

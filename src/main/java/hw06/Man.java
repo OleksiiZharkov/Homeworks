@@ -14,6 +14,10 @@ public final class Man extends Human {
         super(name, surname, year, iq, schedule);
     }
 
+    public Man(String сергій, String сидоров, String s, int i) {
+        super();
+    }
+
     @Override
     public void greetPet() {
         System.out.println("Привіт, друже!");
