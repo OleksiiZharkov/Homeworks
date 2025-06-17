@@ -1,4 +1,7 @@
 package hw10;
+import sun.security.x509.X500Name;
+
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.*;
 
@@ -101,6 +104,14 @@ class Family {
                 "Дети: " + children + "\n" +
                 "Питомцы: " + pets;
     }
+
+    public Collection getChildren() {
+        return List.of();
+    }
+
+    public X500Name getFather() {
+        return null;
+    }
 }
 
 
@@ -174,7 +185,7 @@ class FamilyService {
         familyDao.saveFamily(new Family(mother, father));
     }
 
-    public void bornChild(Family family, String masculineName, String feminineName) {
+    public void bornChild(Family family, String masculineName, String feminineName) throws IOException {
         boolean isMale = new Random().nextBoolean();
         String name = isMale ? masculineName : feminineName;
         Human child = isMale ?

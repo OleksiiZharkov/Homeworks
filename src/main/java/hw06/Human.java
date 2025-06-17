@@ -24,6 +24,10 @@ public class Human {
         this(name, surname, year);
     }
 
+    public Human() {
+
+    }
+
     public void greetPet() {
         System.out.println("Привіт, домашня тваринко!");
     }
