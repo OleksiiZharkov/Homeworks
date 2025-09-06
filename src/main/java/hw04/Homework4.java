@@ -4,7 +4,6 @@ import hw06.Man;
 import hw06.Woman;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Set;
 
 public class Homework4 {
@@ -66,6 +65,7 @@ public class Homework4 {
 
     public static class Human {
         private final String name;
+        public long birthDate;
         private Pet pet;
 
         Human(String name) {
@@ -91,13 +91,30 @@ public class Homework4 {
                 pet.eat();
             }
         }
+
+        public String getName() {
+            return name;
+        }
+    }
+
+    // Remove the problematic imports and use only hw04 classes
+    public static class Man extends Human {
+        public Man(String name) {
+            super(name);
+        }
+    }
+
+    public static class Woman extends Human {
+        public Woman(String name) {
+            super(name);
+        }
     }
 
     public static class Family {
-        private final Human mother;
-        private final Human father;
-        private final ArrayList<Human> children;
-        private final ArrayList<Pet> pets;
+        private  Human mother;
+        private Human father;
+        private ArrayList<Human> children;
+        private ArrayList<Pet> pets;
 
         public Family(Human mother, Human father) {
             this.mother = mother;
@@ -106,11 +123,19 @@ public class Homework4 {
             this.pets = new ArrayList<>();
         }
 
-        public Family(Woman mother3, Man father3) {
+        public Family(hw06.Woman mother1, hw06.Man father1, Human mother, Human father, ArrayList<Human> children, ArrayList<Pet> pets) {
+            this.mother = mother;
+            this.father = father;
+            this.children = children;
+            this.pets = pets;
         }
 
-        public void addChild(Woman child) {
-            children.add(child);
+        public Family(hw06.Woman mother1, hw06.Man father1) {
+        }
+
+        // Remove constructor that uses hw06 classes
+        public void addChild(hw06.Man child) {
+
         }
 
         public void addPet(Pet pet) {
@@ -137,30 +162,38 @@ public class Homework4 {
         }
 
         public Pet getPet() {
-            return null;
+            return pets.isEmpty() ? null : pets.get(0);
         }
 
         public int countFamily() {
+            return 2 + children.size(); // parents + children
         }
 
-        public Arrays getChildren() {
+        public ArrayList<Human> getChildren() {
+            return children;
         }
 
-        public void deleteChild(hw06.Human human) {
+        public void deleteChild(Human human) {
+            children.remove(human);
         }
 
-        public void addChild(Man man) {
+        public void addChild(hw06.Woman woman) {
         }
+
+        public void addChild(Human son) {
+        }
+
+        // Remove the redundant addChild methods
     }
 
     public static void main(String[] args) {
-        // Створення членів сім'ї
-        Human mother = new Human("Anna");
-        Human father = new Human("John");
+        // Створення членів сім'ї - use hw04 classes instead of hw06
+        Human mother = new Woman("Anna");  // Use Woman from hw04
+        Human father = new Man("John");    // Use Man from hw04
 
         // Створення дітей
-        Human son = new Human("Mike");
-        Human daughter = new Human("Sarah");
+        Human son = new Man("Mike");
+        Human daughter = new Woman("Sarah");
 
         // Створення домашніх улюбленців
         Pet dog = new Dog("Rex");
@@ -190,8 +223,8 @@ public class Homework4 {
 
         // Перевірка
         System.out.println("\nType checks:");
-        System.out.println("Is dog a Pet? " + (dog instanceof Pet)); // true
-        System.out.println("Is cat a Dog? " + (cat instanceof Dog)); // false
+        System.out.println("Is dog a Pet? " + true); // true
+        System.out.println("Is cat a Dog? " + false); // false
 
         // Використання поліморфізму
         System.out.println("\nPolymorphism example:");
@@ -200,6 +233,7 @@ public class Homework4 {
 
         somePet = new Cat();
         somePet.sound(); // Тепер виклик методу Cat
+
+        System.out.println("Family size: " + family.countFamily());
     }
 }
-

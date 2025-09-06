@@ -256,7 +256,7 @@ class FlightDao {
 class BookingController {
     private final BookingService bookingService;
 
-    public BookingController(FlightController flightController) {
+    public BookingController(FlightController ignoredFlightController) {
         this.bookingService = new BookingService();
     }
 
@@ -376,7 +376,7 @@ class Booking {
     private final String id;
     private final Flight flight;
     private final List<Passenger> passengers;
-    private final LocalDateTime bookingTime;
+    public LocalDateTime bookingTime;
 
     public Booking(String id, Flight flight, List<Passenger> passengers) {
         this.id = id;
@@ -397,7 +397,4 @@ class Booking {
         return new ArrayList<>(passengers);
     }
 
-    public LocalDateTime getBookingTime() {
-        return bookingTime;
-    }
 }

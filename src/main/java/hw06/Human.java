@@ -3,6 +3,7 @@ package hw06;
 import hw04.Homework4;
 
 import java.time.DayOfWeek;
+import java.util.HashMap;
 import java.util.Map;
 
 public class Human {
@@ -11,6 +12,9 @@ public class Human {
     static {
         System.out.println("Human class is being loaded");
     }
+
+    private String олена;
+    private String іванова;
 
     {
         System.out.println("Human object is being created");
@@ -26,6 +30,11 @@ public class Human {
 
     public Human() {
 
+    }
+
+    public <K, V> Human(String олена, String іванова, int i, int i1, HashMap<K,V> kvHashMap, Object o) {
+        this.олена = олена;
+        this.іванова = іванова;
     }
 
     public void greetPet() {

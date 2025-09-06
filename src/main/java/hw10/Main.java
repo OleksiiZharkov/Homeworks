@@ -1,10 +1,7 @@
 package hw10;
-import sun.security.x509.X500Name;
 
 import java.io.IOException;
-import java.util.Calendar;
 import java.util.*;
-
 
 class Human {
     private final String name;
@@ -16,6 +13,10 @@ class Human {
         this.surname = surname;
         this.birthYear = birthYear;
     }
+
+    public String getName() { return name; }
+    public String getSurname() { return surname; }
+    public int getBirthYear() { return birthYear; }
 
     public int getAge() {
         return Calendar.getInstance().get(Calendar.YEAR) - birthYear;
@@ -39,7 +40,6 @@ class Woman extends Human {
     }
 }
 
-
 interface Pet {
     String getName();
 }
@@ -62,7 +62,6 @@ class Dog implements Pet {
     }
 }
 
-
 class Family {
     private final Human mother;
     private final Human father;
@@ -75,6 +74,11 @@ class Family {
         this.children = new ArrayList<>();
         this.pets = new HashSet<>();
     }
+
+    public Human getMother() { return mother; }
+    public Human getFather() { return father; }
+    public List<Human> getChildren() { return children; }
+    public Set<Pet> getPets() { return pets; }
 
     public void addChild(Human child) {
         children.add(child);
@@ -104,16 +108,7 @@ class Family {
                 "Дети: " + children + "\n" +
                 "Питомцы: " + pets;
     }
-
-    public Collection getChildren() {
-        return List.of();
-    }
-
-    public X500Name getFather() {
-        return null;
-    }
 }
-
 
 interface FamilyDao {
     List<Family> getAllFamilies();
@@ -122,7 +117,6 @@ interface FamilyDao {
     boolean deleteFamily(Family family);
     void saveFamily(Family family);
 }
-
 
 class CollectionFamilyDao implements FamilyDao {
     private final List<Family> families = new ArrayList<>();
@@ -162,51 +156,6 @@ class CollectionFamilyDao implements FamilyDao {
     }
 }
 
-
-class FamilyService {
-    private final FamilyDao familyDao;
-
-    public FamilyService(FamilyDao familyDao) {
-        this.familyDao = familyDao;
-    }
-
-    public List<Family> getAllFamilies() {
-        return familyDao.getAllFamilies();
-    }
-
-    public void displayAllFamilies() {
-        List<Family> families = familyDao.getAllFamilies();
-        for (int i = 0; i < families.size(); i++) {
-            System.out.println(i + ": " + families.get(i));
-        }
-    }
-
-    public void createNewFamily(Human father, Human mother) {
-        familyDao.saveFamily(new Family(mother, father));
-    }
-
-    public void bornChild(Family family, String masculineName, String feminineName) throws IOException {
-        boolean isMale = new Random().nextBoolean();
-        String name = isMale ? masculineName : feminineName;
-        Human child = isMale ?
-                new Man(name, family.getFather().getSurname(), Calendar.getInstance().get(Calendar.YEAR)) :
-                new Woman(name, family.getFather().getSurname(), Calendar.getInstance().get(Calendar.YEAR));
-
-        family.addChild(child);
-        familyDao.saveFamily(family);
-    }
-
-    public void deleteAllChildrenOlderThan(int age) {
-        familyDao.getAllFamilies().forEach(family -> {
-            family.getChildren().removeIf(child -> child.getAge() > age);
-            familyDao.saveFamily(family);
-        });
-    }
-
-
-}
-
-
 class FamilyController {
     private final FamilyService familyService;
 
@@ -217,32 +166,33 @@ class FamilyController {
     public void displayAllFamilies() {
         familyService.displayAllFamilies();
     }
-
-
 }
 
-
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         // Инициализация компонентов
         FamilyDao dao = new CollectionFamilyDao();
         FamilyService service = new FamilyService(dao);
         FamilyController controller = new FamilyController(service);
 
-
         Human father = new Man("Иван", "Иванов", 1980);
         Human mother = new Woman("Мария", "Иванова", 1985);
         service.createNewFamily(father, mother);
 
-
         Family family = service.getAllFamilies().get(0);
         service.bornChild(family, "Алексей", "Анна");
 
-
         family.addPet(new Dog("Шарик"));
-
 
         System.out.println("Все семьи:");
         controller.displayAllFamilies();
+
+        // Test the new methods
+        System.out.println("\nСемьи с более чем 3 членами: " +
+                service.getFamiliesBiggerThan(3).size());
+        System.out.println("Количество семей с 3 членами: " +
+                service.countFamiliesWithMemberNumber(3));
+        System.out.println("Имена всех детей: " +
+                service.getAllChildrenNames());
     }
 }

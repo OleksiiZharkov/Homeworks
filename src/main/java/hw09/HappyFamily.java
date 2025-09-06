@@ -53,7 +53,7 @@ public class HappyFamily {
 
         public void deleteAllChildrenOlderThan(int age) {
             families.forEach(family -> {
-                List<Human> childrenToRemove = family.getChildren().stream()
+                List<Homework4.Human> childrenToRemove = family.getChildren().stream()
                         .filter(child -> {
                             // Using the long timestamp stored in child.birthDate
                             LocalDate birthDate = Instant.ofEpochMilli(child.birthDate)
@@ -62,7 +62,7 @@ public class HappyFamily {
                             int childAge = Period.between(birthDate, LocalDate.now()).getYears();
                             return childAge > age;
                         })
-                        .collect(Collectors.toList());
+                        .toList().reversed();
 
                 childrenToRemove.forEach(family::deleteChild);
             });
