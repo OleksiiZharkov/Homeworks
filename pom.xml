@@ -12,7 +12,8 @@
 
     <modules>
         <module>tinder</module>
-        <module>snake</module> </modules>
+        <module>snake</module>
+        <module>client-bank</module> </modules>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
