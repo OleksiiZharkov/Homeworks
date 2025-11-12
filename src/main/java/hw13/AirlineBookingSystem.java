@@ -6,7 +6,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-// Головний клас програми
 public class AirlineBookingSystem {
     public static void main(String[] args) {
         ConsoleInterface console = new ConsoleInterface();
@@ -14,7 +13,6 @@ public class AirlineBookingSystem {
     }
 }
 
-// Клас для роботи з консоллю
 class ConsoleInterface {
     private final FlightController flightController;
     private final BookingController bookingController;
@@ -160,7 +158,6 @@ class ConsoleInterface {
     }
 }
 
-// Контролер для роботи з рейсами
 class FlightController {
     private final FlightService flightService;
 
@@ -181,7 +178,6 @@ class FlightController {
     }
 }
 
-// Сервіс для роботи з рейсами
 class FlightService {
     private final FlightDao flightDao;
 
@@ -221,7 +217,6 @@ class FlightService {
     }
 }
 
-// DAO для роботи з рейсами
 class FlightDao {
     private final List<Flight> flights;
 
@@ -252,7 +247,6 @@ class FlightDao {
     }
 }
 
-// Контролер для роботи з бронюваннями
 class BookingController {
     private final BookingService bookingService;
 
@@ -273,7 +267,6 @@ class BookingController {
     }
 }
 
-// Сервіс для роботи з бронюваннями
 class BookingService {
     private final BookingDao bookingDao;
 
@@ -305,7 +298,6 @@ class BookingService {
     }
 }
 
-// DAO для роботи з бронюваннями
 class BookingDao {
     private final Map<String, Booking> bookings = new HashMap<>();
 
@@ -322,7 +314,6 @@ class BookingDao {
     }
 }
 
-// Класи сутностей
 record Flight(String id, String origin, String destination, LocalDateTime departureTime,
               int totalSeats, int availableSeats) {
 
