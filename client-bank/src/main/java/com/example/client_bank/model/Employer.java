@@ -4,12 +4,18 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
+import lombok.*;
 
 import java.util.HashSet;
 import java.util.Set;
 
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "employers")
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Employer extends AbstractEntity {
 
     private String name;
@@ -17,12 +23,7 @@ public class Employer extends AbstractEntity {
 
     @ManyToMany(mappedBy = "employers")
     @JsonBackReference
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private Set<Customer> customers = new HashSet<>();
-
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
-    public String getAddress() { return address; }
-    public void setAddress(String address) { this.address = address; }
-    public Set<Customer> getCustomers() { return customers; }
-    public void setCustomers(Set<Customer> customers) { this.customers = customers; }
 }

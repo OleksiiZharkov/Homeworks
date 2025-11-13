@@ -15,6 +15,10 @@ public class Solution {
         }
 
         Point head = board.getHead();
+
+        if (board.getApples().isEmpty()) {
+            return Direction.UP;
+        }
         Point apple = board.getApples().get(0);
         Direction currentDirection = board.getSnakeDirection();
 
@@ -30,30 +34,31 @@ public class Solution {
                 continue;
             }
 
-            Point nextHead = dir.apply(head);
-
-            if (!obstacles.contains(nextHead)) {
-                safeMoves.add(dir);
+            Point nextHead = getNextHead(board, head, dir);
+            if (nextHead == null || obstacles.contains(nextHead)) {
+                continue;
             }
+
+            safeMoves.add(dir);
         }
 
         if (safeMoves.isEmpty()) {
-            return Direction.UP;
+            if (!isOpposite(Direction.UP, currentDirection)) return Direction.UP;
+            if (!isOpposite(Direction.RIGHT, currentDirection)) return Direction.RIGHT;
+            if (!isOpposite(Direction.LEFT, currentDirection)) return Direction.LEFT;
+            return Direction.DOWN;
         }
 
-        return findBestMove(safeMoves, head, apple);
+        return findBestMove(safeMoves, head, apple, board);
     }
 
-    private static Direction findBestMove(List<Direction> safeMoves, Point head, Point apple) {
+    private static Direction findBestMove(List<Direction> safeMoves, Point head, Point apple, Board board) {
         Direction bestMove = safeMoves.get(0);
-
-
         double minDistance = Double.MAX_VALUE;
 
         for (Direction dir : safeMoves) {
-
-            Point newHead = dir.apply(head);
-
+            Point newHead = getNextHead(board, head, dir);
+            if (newHead == null) continue;
 
             double distance = newHead.distance(apple);
 
@@ -65,6 +70,31 @@ public class Solution {
         return bestMove;
     }
 
+    private static Point getNextHead(Board board, Point head, Direction dir) {
+        int nextX = head.getX();
+        int nextY = head.getY();
+
+        switch (dir) {
+            case UP:
+                nextY--;
+                break;
+            case DOWN:
+                nextY++;
+                break;
+            case LEFT:
+                nextX--;
+                break;
+            case RIGHT:
+                nextX++;
+                break;
+        }
+
+        try {
+            return board.getPointAt(nextX, nextY);
+        } catch (Exception e) {
+            return null;
+        }
+    }
     private static boolean isOpposite(Direction newDir, Direction currentDir) {
         if (newDir == Direction.UP && currentDir == Direction.DOWN) return true;
         if (newDir == Direction.DOWN && currentDir == Direction.UP) return true;

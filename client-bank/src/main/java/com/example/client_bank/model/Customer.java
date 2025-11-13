@@ -1,7 +1,9 @@
 package com.example.client_bank.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -10,11 +12,28 @@ import java.util.Set;
 
 @Entity
 @Table(name = "customers")
+
+@Getter
+@Setter
+@EqualsAndHashCode(callSuper = false, exclude = {"accounts", "employers"})
+@ToString(exclude = {"accounts", "employers"})
+@NoArgsConstructor
+@AllArgsConstructor
 public class Customer extends AbstractEntity {
 
+    @Column(nullable = false)
     private String name;
+
+    @Column(nullable = false, unique = true)
     private String email;
+
     private Integer age;
+
+    @Column(name = "phone_number", unique = true)
+    private String phoneNumber;
+
+    @JsonIgnore
+    private String password;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.EAGER)
     @JsonManagedReference
@@ -29,25 +48,11 @@ public class Customer extends AbstractEntity {
     @JsonManagedReference
     private Set<Employer> employers = new HashSet<>();
 
-    public Customer() {
-    }
-
     public Customer(String name, String email, Integer age) {
         this.name = name;
         this.email = email;
         this.age = age;
     }
-
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
-    public Integer getAge() { return age; }
-    public void setAge(Integer age) { this.age = age; }
-    public List<Account> getAccounts() { return accounts; }
-    public void setAccounts(List<Account> accounts) { this.accounts = accounts; }
-    public Set<Employer> getEmployers() { return employers; }
-    public void setEmployers(Set<Employer> employers) { this.employers = employers; }
 
     public void addAccount(Account account) {
         this.accounts.add(account);

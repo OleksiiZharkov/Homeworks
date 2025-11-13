@@ -1,5 +1,5 @@
 package com.example.client_bank.service;
-
+import com.example.client_bank.exception.ResourceNotFoundException;
 import com.example.client_bank.model.Account;
 import com.example.client_bank.model.Currency;
 import com.example.client_bank.model.Customer;
@@ -7,10 +7,10 @@ import com.example.client_bank.model.Employer;
 import com.example.client_bank.repository.AccountRepository;
 import com.example.client_bank.repository.CustomerRepository;
 import com.example.client_bank.repository.EmployerRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class CustomerService {
@@ -28,13 +28,13 @@ public class CustomerService {
         this.employerRepository = employerRepository;
     }
 
-    public List<Customer> getAllCustomers() {
-        return customerRepository.findAll();
+    public Page<Customer> getAllCustomers(Pageable pageable) {
+        return customerRepository.findAll(pageable);
     }
 
     public Customer getCustomerById(Long id) {
         return customerRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Customer with id " + id + " not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Customer with id " + id + " not found"));
     }
 
     public Customer createCustomer(Customer customer) {
@@ -46,10 +46,14 @@ public class CustomerService {
         customer.setName(updatedCustomer.getName());
         customer.setEmail(updatedCustomer.getEmail());
         customer.setAge(updatedCustomer.getAge());
+        customer.setPhoneNumber(updatedCustomer.getPhoneNumber());
         return customerRepository.save(customer);
     }
 
     public void deleteCustomer(Long id) {
+        if (!customerRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Customer with id " + id + " not found");
+        }
         customerRepository.deleteById(id);
     }
 
@@ -63,7 +67,7 @@ public class CustomerService {
         Customer customer = getCustomerById(customerId);
 
         Account account = accountRepository.findById(accountId)
-                .orElseThrow(() -> new RuntimeException("Account with id " + accountId + " not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Account with id " + accountId + " not found"));
 
         if (!account.getCustomer().getId().equals(customer.getId())) {
             throw new SecurityException("This account does not belong to the specified customer");
@@ -74,8 +78,9 @@ public class CustomerService {
 
     public Customer addEmployerToCustomer(Long customerId, Long employerId) {
         Customer customer = getCustomerById(customerId);
+
         Employer employer = employerRepository.findById(employerId)
-                .orElseThrow(() -> new RuntimeException("Employer not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Employer with id " + employerId + " not found"));
 
         customer.addEmployer(employer);
         return customerRepository.save(customer);
@@ -83,8 +88,9 @@ public class CustomerService {
 
     public Customer removeEmployerFromCustomer(Long customerId, Long employerId) {
         Customer customer = getCustomerById(customerId);
+
         Employer employer = employerRepository.findById(employerId)
-                .orElseThrow(() -> new RuntimeException("Employer not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Employer with id " + employerId + " not found"));
 
         customer.getEmployers().remove(employer);
         return customerRepository.save(customer);
